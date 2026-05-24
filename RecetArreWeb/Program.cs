@@ -13,17 +13,15 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 // Configurar HttpClient con handler de autorización
 builder.Services.AddScoped<AuthorizationMessageHandler>();
 
-builder.Services.AddScoped(sp => 
+builder.Services.AddScoped(sp =>
 {
     var handler = sp.GetRequiredService<AuthorizationMessageHandler>();
     handler.InnerHandler = new HttpClientHandler();
-    
-    var httpClient = new HttpClient(handler)
-    {
-        BaseAddress = new Uri("https://RestArre.somee.com/")
-    };
-    
-    return httpClient;
+
+    var config = sp.GetRequiredService<IConfiguration>();
+    var baseUrl = config["ApiBaseUrl"] ?? "https://RestArre.somee.com/";
+
+    return new HttpClient(handler) { BaseAddress = new Uri(baseUrl) };
 });
 
 // Registrar servicios

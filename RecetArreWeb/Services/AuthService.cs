@@ -95,13 +95,9 @@ namespace RecetArreWeb.Services
             try
             {
                 var token = await tokenService.ObtenerToken();
-                
+
                 if (string.IsNullOrEmpty(token))
                     return null;
-
-                // Agregar el token actual al header
-                httpClient.DefaultRequestHeaders.Authorization = 
-                    new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
 
                 var response = await httpClient.GetAsync($"{endpoint}/RenovarToken");
 
